@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #include "include/puzzle.h"
 #include "include/io.h"
@@ -28,6 +29,8 @@ int pnumber(char piece) {
 }
 
 int main() {
+  srand(time(NULL));
+
   char input;
   char* message = (char*) malloc(sizeof(char)*64);
   strcpy(message, "");
