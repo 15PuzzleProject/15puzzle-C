@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
 
 #include "include/puzzle.h"
 #include "include/io.h"
@@ -28,7 +29,7 @@ int pnumber(char piece) {
   };
 }
 
-int main() {
+void game_loop() {
   srand(time(NULL));
 
   char input;
@@ -64,7 +65,8 @@ int main() {
       }
 
       if (p->complete) {
-        strcpy(message, "YOU WIN! (Press R to [R]eset)");
+        time_t time_taken = get_time_taken(p);
+        sprintf(message, "YOU WIN! Time: %d:%d", time_taken / 60, time_taken % 60);
       }
     }
   }
@@ -72,5 +74,8 @@ int main() {
   printf("\nBye!\n\n");
   free(p);
   free(message);
-  return 0;
+}
+
+int main() {
+  game_loop();
 }

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <time.h>
 
 #include "include/puzzle.h"
 #include "include/util.h"
@@ -56,6 +57,7 @@ void reset(Puzzle* p) {
   p->moves = 0;
   p->start_time = 0;
   p->complete = FALSE;
+  time(&p->start_time);
   randomize(p);
 }
 
@@ -109,4 +111,14 @@ int can_move(Puzzle* puzzle, int piece) {
 void move(Puzzle* puzzle, int piece) {
   swap(puzzle, piece, 0);
   puzzle->complete = is_complete(puzzle);
+
+  if (puzzle->complete)
+    time(&puzzle->end_time);
+}
+
+time_t get_time_taken(Puzzle* puzzle) {
+  if (puzzle->complete)
+    return puzzle->end_time - puzzle->start_time;
+  else
+    return -1;
 }
