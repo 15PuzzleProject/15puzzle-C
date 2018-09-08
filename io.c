@@ -3,7 +3,7 @@
 #include "include/io.h"
 #include "include/puzzle.h"
 
-char table_layout[] = "*---*---*---*---*\n| %c | %c | %c | %c |    THE 15-PUZZLE PROJECT: C\n*---*---*---*---*\n| %c | %c | %c | %c |    Type piece to move\n*---*---*---*---*    [R]eset or [Q]uit\n| %c | %c | %c | %c |\n*---*---*---*---*\n| %c | %c | %c | %c |    %s\n*---*---*---*---*\n";
+char table_layout[] = "*---*---*---*---*\n| %c | %c | %c | %c |    THE 15-PUZZLE PROJECT: C\n*---*---*---*---*\n| %c | %c | %c | %c |    WASD to move\n*---*---*---*---*    [R]eset or [Q]uit\n| %c | %c | %c | %c |\n*---*---*---*---*\n| %c | %c | %c | %c |    %s\n*---*---*---*---*\n";
 char pieces[16] = { ' ', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
 char get_piece(Puzzle* puzzle, int index) {
@@ -20,14 +20,22 @@ void print_puzzle(Puzzle* p, char *message) {
 
 char map_input(char input) {
   switch (input) {
+    case 'w': return 'W';
     case 'a': return 'A';
-    case 'b': return 'B';
-    case 'c': return 'C';
+    case 's': return 'S';
     case 'd': return 'D';
-    case 'e': return 'E';
-    case 'f': return 'F';
     case 'q': return 'Q';
     case 'r': return 'R';
     default: return input;
+  }
+}
+
+int get_direction(char input) {
+  switch (input) {
+    case 'W': return UP;
+    case 'A': return LEFT;
+    case 'S': return DOWN;
+    case 'D': return RIGHT;
+    default: return -1;
   }
 }

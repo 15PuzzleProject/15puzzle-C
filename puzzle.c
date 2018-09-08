@@ -89,27 +89,51 @@ int is_complete(Puzzle* puzzle) {
   return TRUE;
 }
 
-int can_move(Puzzle* puzzle, int piece) {
-  int s_idx, s_lin, s_col, p_idx, p_lin, p_col;
+int can_move(Puzzle* puzzle, int direction) {
+  int s_idx, s_lin, s_col;
 
   // Space
   s_idx = find(puzzle, 0);
   s_lin = lin(s_idx);
   s_col = col(s_idx);
 
-  // Piece
-  p_idx = find(puzzle, piece);
-  p_lin = lin(p_idx);
-  p_col = col(p_idx);
-
-  int horizontal = (p_lin == s_lin) && ((p_col == s_col+1) || (p_col == s_col-1));
-  int vertical = (p_col == s_col) && ((p_lin == s_lin+1) || (p_lin == s_lin-1));
-
-  return (horizontal || vertical);
+  switch (direction) {
+    case UP:
+      return (3 != s_lin);
+    case DOWN:
+      return (0 != s_lin);
+    case LEFT:
+      return (3 != s_col);
+    case RIGHT:
+      return (0 != s_col);
+    default:
+      return FALSE;
+  }
 }
 
-void move(Puzzle* puzzle, int piece) {
-  swap(puzzle, piece, 0);
+void move(Puzzle* puzzle, int direction) {
+
+  int offset, space_idx;
+
+  switch (direction) {
+    case UP:
+      offset = 4;
+      break;
+    case DOWN:
+      offset = -4;
+      break;
+    case LEFT:
+      offset = 1;
+      break;
+    case RIGHT:
+      offset = -1;
+      break;
+  }
+
+  space_idx = find(puzzle, 0);
+  puzzle->table[space_idx] = puzzle->table[space_idx + offset];
+  puzzle->table[space_idx + offset] = 0;
+
   puzzle->complete = is_complete(puzzle);
 
   if (puzzle->complete)
