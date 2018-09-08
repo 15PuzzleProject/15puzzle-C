@@ -2,10 +2,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include <unistd.h>
 
 #include "include/puzzle.h"
 #include "include/io.h"
+#include "include/save.h"
 
 int pnumber(char piece) {
   switch(piece) {
@@ -31,6 +31,8 @@ int pnumber(char piece) {
 
 void game_loop() {
   srand(time(NULL));
+
+  long highscore = load_score();
 
   char input;
   char* message = (char*) malloc(sizeof(char)*64);
@@ -66,7 +68,13 @@ void game_loop() {
 
       if (p->complete) {
         time_t time_taken = get_time_taken(p);
-        sprintf(message, "YOU WIN! Time: %d:%d", time_taken / 60, time_taken % 60);
+
+        if (time_taken < highscore || -1 == highscore) {
+          highscore = time_taken;
+          save_score(highscore);
+        }
+
+        sprintf(message, "YOU WIN! Time: %d:%d (Best: %d:%d)", time_taken / 60, time_taken % 60, highscore / 60, highscore % 60);
       }
     }
   }
